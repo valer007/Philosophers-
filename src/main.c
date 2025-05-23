@@ -1,71 +1,90 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vmakarya <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/18 23:22:23 by vmakarya          #+#    #+#             */
+/*   Updated: 2025/05/23 22:45:37 by vmakarya         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
-void monitoring(t_data *data)
-{
-	int	i;
-
-	if (!data->finished)
-	{
-		i = 0;
-		while (i < data->philo_count)
-		{
-			if (my_gettime() - data->philos[i].last_meal > (long long)data->time_to_die)
-			{
-				data->finished = 1;
-				print_action(&data->philos[i], "died");
-				return ;
-			}
-			i++;
-		}
-		usleep(1000);
-	}
-}
-
-int check_args(char **argv)
+int monitoring(t_data *data)
 {
 	int i;
-	int j;
 
-	i = 1;
-	while (argv[i])
+	while (1)
 	{
-		j = 0;
-		while (argv[i][j])
+		i = 0;
+		while (i < data->nb_philo)
 		{
-			if (argv[i][j] < '0' || argv[i][j] > '9')
-			{
+			t_philo *philo = &data->philos[i];
+			pthread_mutex_lock(&philo->meal_mutex);
+			pthread_mutex_lock(&data->finish_mutex);
+			if (philo->data->max_meals != -1 && philo->meals_eaten >= philo->data->max_meals)
 				return (0);
+			if (timestamp() - philo->last_meal >= data->time_to_die)
+			{
+				data->finish = 1;
+				printf("%ld %d %s\n", timestamp() - philo->data->start_time, philo->id, "died");
+				pthread_mutex_unlock(&data->finish_mutex);
+				pthread_mutex_unlock(&philo->meal_mutex);
+				return (1);
 			}
-			j++;
+			pthread_mutex_unlock(&data->finish_mutex);
+			pthread_mutex_unlock(&philo->meal_mutex);
+			i++;
 		}
-		i++;
+		ft_usleep(10);
 	}
-	return (1);
+	return (0);
+}
+
+void one_philo(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->stop_mutex);
+	print_action(philo, "hase taken a fork");
+	ft_usleep(philo->data->time_to_die);
+	print_action(philo, "died");
+	pthread_mutex_unlock(&philo->stop_mutex);
 }
 
 int main(int argc, char **argv)
 {
-	t_data 	data;
-	int 	i;
+	t_data	data;
+	int		i;
 
 	i = 0;
-	if(argc != 5 && argc != 6)
-	 	return (1);
-	if (!check_args(argv))
-		return (printf("invalid arguments"));
-	if (!initializer(&data, argv, argc))
-		return (printf("Initialization failed\n"), 1);
-	init_philos(&data);
-	if (argv[1][0] == '1')
-		return (one_philo(data.philos), 0);
-	while (i < data.philo_count)
+	if (argc != 5 && argc != 6)
 	{
-		pthread_create(&data.philos[i].thread, NULL, routine, &data.philos[i]);
+		printf("invalid arguments count\n");
+		return (0);
+	}
+	if (!check_args(argv))
+		return (0);
+	if (!init_data(&data, argv))
+	{
+		printf("initialization error\n");
+		return (0);
+	}
+	init_philo(&data, argv);
+	if (data.nb_philo == 1)
+		return (one_philo(&data.philos[0]), destroy_philo(&data), 0);
+	while (i < data.nb_philo)
+	{
+		pthread_create(&data.philos[i].philo, NULL, routine, (void *)&(data.philos[i]));
 		i++;
 	}
 	monitoring(&data);
 	i = 0;
-	while (i < data.philo_count)
-		pthread_join(data.philos[i++].thread, NULL);
-	return (0);
+	while (i < data.nb_philo)
+	{
+		pthread_join(data.philos[i].philo, NULL);
+		i++;
+	}
+	destroy_philo(&data);
 }
+

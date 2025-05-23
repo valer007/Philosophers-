@@ -3,7 +3,7 @@ BONUS_NAME  = philo_bonus
 
 CC          = cc
 INCLUDE     = -I./include
-CFLAGS = -g -Wall -Wextra -Werror $(INCLUDE) -fsanitize=address,undefined -fno-omit-frame-pointer
+CFLAGS = -g -Wall -Wextra -Werror $(INCLUDE) -fsanitize=thread
 
 SRC_DIR     = src
 OBJ_DIR     = obj
