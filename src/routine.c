@@ -6,7 +6,7 @@
 /*   By: vmakarya <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/18 23:22:24 by vmakarya          #+#    #+#             */
-/*   Updated: 2025/05/23 22:40:07 by vmakarya         ###   ########.fr       */
+/*   Updated: 2025/05/24 15:01:26 by vmakarya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 int is_died(t_philo *philo)
 {
-	// if (philo->data->max_meals != -1 && philo->meals_eaten >= philo->data->max_meals)
-	// 	return (1);
+	if (philo->data->max_meals != -1 && philo->meals_eaten >= philo->data->max_meals)
+		return (1);
 	int die;
 	pthread_mutex_lock(&philo->data->finish_mutex);
 	die = *(philo->finished);
