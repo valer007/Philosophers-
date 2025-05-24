@@ -6,7 +6,7 @@
 /*   By: vmakarya <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/18 23:22:23 by vmakarya          #+#    #+#             */
-/*   Updated: 2025/05/24 15:20:11 by vmakarya         ###   ########.fr       */
+/*   Updated: 2025/05/24 23:09:03 by vmakarya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,17 @@ int monitoring(t_data *data)
 			t_philo *philo = &data->philos[i];
 			pthread_mutex_lock(&philo->meal_mutex);
 			pthread_mutex_lock(&data->finish_mutex);
+		if (philo->data->max_meals != -1 && philo->meals_eaten >= philo->data->max_meals)
+		{
+			data->finish = 1;
+			pthread_mutex_unlock(&data->finish_mutex);
+			pthread_mutex_unlock(&philo->meal_mutex);
+			return (1);
+		}
 		if (timestamp() - philo->last_meal >= data->time_to_die)
 		{
 			data->finish = 1;
-			if (philo->meals_eaten < philo->data->max_meals)
-				printf("%ld %d %s\n", timestamp() - philo->data->start_time, philo->id, "died");
+			printf("%ld %d %s\n", timestamp() - philo->data->start_time, philo->id, "died");
 			pthread_mutex_unlock(&data->finish_mutex);
 			pthread_mutex_unlock(&philo->meal_mutex);
 			return (1);
