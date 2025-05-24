@@ -6,11 +6,34 @@
 /*   By: vmakarya <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:41:06 by vmakarya          #+#    #+#             */
-/*   Updated: 2025/05/23 17:58:33 by vmakarya         ###   ########.fr       */
+/*   Updated: 2025/05/24 23:48:47 by vmakarya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+int	check_args(char **argv)
+{
+	int	i;
+	int	j;
+
+	i = 1;
+	while (argv[i])
+	{
+		j = 0;
+		while (argv[i][j])
+		{
+			if (argv[i][j] < '0' || argv[i][j] > '9')
+			{
+				printf("invalide argumnents\n");
+				return (0);
+			}
+			j++;
+		}
+		i++;
+	}
+	return (1);
+}
 
 int	init_data(t_data *data, char **argv)
 {
@@ -30,7 +53,12 @@ int	init_data(t_data *data, char **argv)
 	data->forks = malloc(sizeof(pthread_mutex_t) * data->nb_philo);
 	data->start_time = timestamp();
 	if (!data->philos || !data->forks)
-		return (free(data->forks), free(data->philos), printf("malloc fail\n"), 0);
+	{
+		free(data->forks);
+		free(data->philos);
+		printf("malloc fail\n");
+		return (0);
+	}
 	while (i < data->nb_philo)
 		pthread_mutex_init(&data->forks[i++], NULL);
 	return (1);

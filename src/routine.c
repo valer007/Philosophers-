@@ -6,24 +6,26 @@
 /*   By: vmakarya <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/18 23:22:24 by vmakarya          #+#    #+#             */
-/*   Updated: 2025/05/24 23:37:49 by vmakarya         ###   ########.fr       */
+/*   Updated: 2025/05/24 23:59:35 by vmakarya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int is_died(t_philo *philo)
+static int	is_died(t_philo *philo)
 {
-	if (philo->data->max_meals != -1 && philo->meals_eaten >= philo->data->max_meals)
+	int	die;
+
+	if (philo->data->max_meals != -1
+		&& philo->meals_eaten >= philo->data->max_meals)
 		return (1);
-	int die;
 	pthread_mutex_lock(&philo->data->finish_mutex);
 	die = *(philo->finished);
 	pthread_mutex_unlock(&philo->data->finish_mutex);
 	return (die);
 }
 
-static void eat(t_philo *philo)
+static void	eat(t_philo *philo)
 {
 	if (philo->id % 2 == 1)
 	{
@@ -43,7 +45,7 @@ static void eat(t_philo *philo)
 
 void	*routine(void *arg)
 {
-	t_philo *philo;
+	t_philo	*philo;
 
 	philo = (t_philo *)arg;
 	if (philo->id % 2 == 0)
