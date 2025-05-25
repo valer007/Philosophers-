@@ -6,7 +6,7 @@
 /*   By: vmakarya <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/18 23:22:23 by vmakarya          #+#    #+#             */
-/*   Updated: 2025/05/24 23:59:03 by vmakarya         ###   ########.fr       */
+/*   Updated: 2025/05/25 23:07:17 by vmakarya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,25 +15,27 @@
 static int	check_philo_status(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->meal_mutex);
-	pthread_mutex_lock(&philo->data->finish_mutex);
 	if (philo->data->max_meals != -1
 		&& philo->meals_eaten >= philo->data->max_meals)
 	{
+		pthread_mutex_unlock(&philo->meal_mutex);
+		pthread_mutex_lock(&philo->data->finish_mutex);
 		philo->data->finish = 1;
 		pthread_mutex_unlock(&philo->data->finish_mutex);
-		pthread_mutex_unlock(&philo->meal_mutex);
 		return (1);
 	}
+	pthread_mutex_unlock(&philo->meal_mutex);
+	pthread_mutex_lock(&philo->meal_mutex);
 	if (timestamp() - philo->last_meal >= philo->data->time_to_die)
 	{
+		pthread_mutex_unlock(&philo->meal_mutex);
+		pthread_mutex_lock(&philo->data->finish_mutex);
 		philo->data->finish = 1;
 		printf("%ld %d died\n", timestamp() - philo->data->start_time,
 			philo->id);
 		pthread_mutex_unlock(&philo->data->finish_mutex);
-		pthread_mutex_unlock(&philo->meal_mutex);
 		return (1);
 	}
-	pthread_mutex_unlock(&philo->data->finish_mutex);
 	pthread_mutex_unlock(&philo->meal_mutex);
 	return (0);
 }
@@ -51,7 +53,7 @@ static int	monitoring(t_data *data)
 				return (1);
 			i++;
 		}
-		ft_usleep(10);
+		//ft_usleep(100);
 	}
 	return (0);
 }
@@ -80,6 +82,7 @@ static int	start_threads_and_monitor(t_data *data)
 	{
 		pthread_create(&data->philos[i].philo,
 			NULL, routine, (void *)&(data->philos[i]));
+		usleep(1000);
 		i++;
 	}
 	monitoring(data);
@@ -102,7 +105,7 @@ int	main(int argc, char **argv)
 		printf("invalid arguments count\n");
 		return (0);
 	}
-	if (!check_args(argv))
+	if (check_args(argv) == 0)
 		return (0);
 	if (!init_data(&data, argv))
 	{

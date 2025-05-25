@@ -25,10 +25,10 @@ all: $(NAME)
 
 bonus: $(BONUS_NAME)
 
-$(NAME): $(OBJ)
+$(NAME): $(OBJ) Makefile
 	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
 
-$(BONUS_NAME): mlx lib $(BONUS_OBJ)
+$(BONUS_NAME): $(BONUS_OBJ)
 	$(CC) $(CFLAGS) $(BONUS_OBJ) -o $(BONUS_NAME)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)

@@ -47,16 +47,14 @@ int	ft_atoi(const char *str)
 void	print_action(t_philo *philo, char *action)
 {
 	pthread_mutex_lock(&philo->data->finish_mutex);
-	if (*(philo->finished))
+	if (!*(philo->finished))
 	{
-		pthread_mutex_unlock(&philo->data->finish_mutex);
-		return ;
+		pthread_mutex_lock(&philo->write_mutex);
+		printf("%ld %d %s\n", timestamp() - philo->data->start_time,
+			philo->id, action);
+		pthread_mutex_unlock(&philo->write_mutex);
 	}
 	pthread_mutex_unlock(&philo->data->finish_mutex);
-	pthread_mutex_lock(&philo->write_mutex);
-	printf("%ld %d %s\n", timestamp() - philo->data->start_time,
-		philo->id, action);
-	pthread_mutex_unlock(&philo->write_mutex);
 }
 
 void	destroy_philo(t_data *data)

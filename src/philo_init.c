@@ -18,6 +18,8 @@ int	check_args(char **argv)
 	int	j;
 
 	i = 1;
+	if (ft_atoi(argv[1]) == 0)
+		return (printf("invalide argumnents\n"), 0);
 	while (argv[i])
 	{
 		j = 0;
