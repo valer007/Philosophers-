@@ -6,7 +6,7 @@
 /*   By: vmakarya <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/18 23:22:23 by vmakarya          #+#    #+#             */
-/*   Updated: 2025/05/25 23:07:17 by vmakarya         ###   ########.fr       */
+/*   Updated: 2025/05/26 02:18:55 by vmakarya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ static int	monitoring(t_data *data)
 				return (1);
 			i++;
 		}
-		//ft_usleep(100);
 	}
 	return (0);
 }
@@ -105,8 +104,11 @@ int	main(int argc, char **argv)
 		printf("invalid arguments count\n");
 		return (0);
 	}
-	if (check_args(argv) == 0)
+	if (check_args(argv) == 0 || check_zero(argc, argv) == 0)
+	{
+		printf("invalid arguments\n");
 		return (0);
+	}
 	if (!init_data(&data, argv))
 	{
 		printf("initialization error\n");

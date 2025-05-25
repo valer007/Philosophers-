@@ -6,11 +6,35 @@
 /*   By: vmakarya <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:41:06 by vmakarya          #+#    #+#             */
-/*   Updated: 2025/05/24 23:48:47 by vmakarya         ###   ########.fr       */
+/*   Updated: 2025/05/26 02:21:09 by vmakarya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+int	check_zero(int argc, char **argv)
+{
+	int	one;
+	int	two;
+	int	three;
+	int	four;
+
+	one = ft_atoi(argv[1]);
+	two = ft_atoi(argv[2]);
+	three = ft_atoi(argv[3]);
+	four = ft_atoi(argv[4]);
+	if (argc == 6 && (ft_atoi(argv[5]) <= 0))
+		return (0);
+	if (one <= 0 || one > 200)
+		return (0);
+	if (two <= 0)
+		return (0);
+	if (three <= 0)
+		return (0);
+	if (four <= 0)
+		return (0);
+	return (1);
+}
 
 int	check_args(char **argv)
 {
@@ -19,17 +43,14 @@ int	check_args(char **argv)
 
 	i = 1;
 	if (ft_atoi(argv[1]) == 0)
-		return (printf("invalide argumnents\n"), 0);
+		return (0);
 	while (argv[i])
 	{
 		j = 0;
 		while (argv[i][j])
 		{
 			if (argv[i][j] < '0' || argv[i][j] > '9')
-			{
-				printf("invalide argumnents\n");
 				return (0);
-			}
 			j++;
 		}
 		i++;

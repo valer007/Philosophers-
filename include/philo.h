@@ -6,7 +6,7 @@
 /*   By: vmakarya <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 00:00:10 by vmakarya          #+#    #+#             */
-/*   Updated: 2025/05/25 00:00:58 by vmakarya         ###   ########.fr       */
+/*   Updated: 2025/05/26 02:12:45 by vmakarya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,13 +47,13 @@ typedef struct s_data
 	int				eat_count;
 	long			start_time;
 	int				finish;
-	pthread_t		check_t;
 	pthread_mutex_t	finish_mutex;
 	pthread_mutex_t	*forks;
 	t_philo			*philos;
 }	t_data;
 
 void		destroy_philo(t_data *data);
+int			check_zero(int argc, char **argv);
 int			check_args(char **argv);
 long		timestamp(void);
 void		ft_usleep(long long ms);
