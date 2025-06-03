@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vmakarya <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: vmakarya <vmakarya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/18 23:22:23 by vmakarya          #+#    #+#             */
-/*   Updated: 2025/05/26 02:18:55 by vmakarya         ###   ########.fr       */
+/*   Updated: 2025/06/03 15:19:29 by vmakarya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,11 @@ static int	check_philo_status(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->meal_mutex);
 	if (philo->data->max_meals != -1
-		&& philo->meals_eaten >= philo->data->max_meals)
+		&& philo->meals_eaten == philo->data->max_meals)
 	{
 		pthread_mutex_unlock(&philo->meal_mutex);
 		pthread_mutex_lock(&philo->data->finish_mutex);
-		philo->data->finish = 1;
+		philo->data->counter++;
 		pthread_mutex_unlock(&philo->data->finish_mutex);
 		return (1);
 	}
@@ -50,6 +50,8 @@ static int	monitoring(t_data *data)
 		while (i < data->nb_philo)
 		{
 			if (check_philo_status(&data->philos[i]))
+				return (1);
+			if (data->counter == data->max_meals)
 				return (1);
 			i++;
 		}

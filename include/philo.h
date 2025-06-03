@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vmakarya <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: vmakarya <vmakarya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 00:00:10 by vmakarya          #+#    #+#             */
-/*   Updated: 2025/05/26 02:12:45 by vmakarya         ###   ########.fr       */
+/*   Updated: 2025/06/03 15:13:55 by vmakarya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ typedef struct s_data
 	int				eat_count;
 	long			start_time;
 	int				finish;
+	int				counter;
 	pthread_mutex_t	finish_mutex;
 	pthread_mutex_t	*forks;
 	t_philo			*philos;

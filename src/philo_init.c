@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_init.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vmakarya <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: vmakarya <vmakarya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:41:06 by vmakarya          #+#    #+#             */
-/*   Updated: 2025/05/26 02:21:09 by vmakarya         ###   ########.fr       */
+/*   Updated: 2025/06/03 15:23:23 by vmakarya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ int	init_data(t_data *data, char **argv)
 	i = 0;
 	data->eat_count = 0;
 	data->finish = 0;
+	data->counter = 0;
 	data->nb_philo = ft_atoi(argv[1]);
 	data->time_to_die = ft_atoi(argv[2]);
 	if (argv[5])
@@ -79,8 +80,7 @@ int	init_data(t_data *data, char **argv)
 	{
 		free(data->forks);
 		free(data->philos);
-		printf("malloc fail\n");
-		return (0);
+		return (printf("malloc fail\n"), 0);
 	}
 	while (i < data->nb_philo)
 		pthread_mutex_init(&data->forks[i++], NULL);

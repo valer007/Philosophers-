@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vmakarya <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: vmakarya <vmakarya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/18 23:22:24 by vmakarya          #+#    #+#             */
-/*   Updated: 2025/05/24 23:59:35 by vmakarya         ###   ########.fr       */
+/*   Updated: 2025/06/03 15:15:01 by vmakarya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,8 @@ void	*routine(void *arg)
 		philo->last_meal = timestamp();
 		pthread_mutex_unlock(&philo->meal_mutex);
 		print_action(philo, "is eating");
-		philo->meals_eaten++;
 		ft_usleep(philo->time_to_eat);
+		philo->meals_eaten++;
 		pthread_mutex_unlock(philo->left_fork);
 		pthread_mutex_unlock(philo->right_fork);
 		print_action(philo, "is sleeping");

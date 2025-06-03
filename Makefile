@@ -18,36 +18,22 @@ BONUS_SRC_FILES =
 SRC        = $(addprefix $(SRC_DIR)/, $(SRC_FILES))
 OBJ        = $(addprefix $(OBJ_DIR)/, $(SRC_FILES:.c=.o))
 
-BONUS_SRC  = $(addprefix $(BONUS_SRC_DIR)/, $(BONUS_SRC_FILES))
-BONUS_OBJ  = $(addprefix $(BONUS_OBJ_DIR)/, $(BONUS_SRC_FILES:.c=.o))
-
 all: $(NAME)
-
-bonus: $(BONUS_NAME)
 
 $(NAME): $(OBJ) Makefile
 	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
 
-$(BONUS_NAME): $(BONUS_OBJ)
-	$(CC) $(CFLAGS) $(BONUS_OBJ) -o $(BONUS_NAME)
-
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
-
-$(BONUS_OBJ_DIR)/%.o: $(BONUS_SRC_DIR)/%.c | $(BONUS_OBJ_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJ_DIR):
 	mkdir -p $(OBJ_DIR)
 
-$(BONUS_OBJ_DIR):
-	mkdir -p $(BONUS_OBJ_DIR)
-
 clean:
-	@rm -rf $(OBJ_DIR) $(BONUS_OBJ_DIR)
+	@rm -rf $(OBJ_DIR)
 
 fclean: clean
-	@rm -f $(NAME) $(BONUS_NAME)
+	@rm -f $(NAME)
 
 re: fclean all
 

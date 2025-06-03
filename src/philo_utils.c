@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vmakarya <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: vmakarya <vmakarya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 15:23:58 by vmakarya          #+#    #+#             */
-/*   Updated: 2025/05/24 23:47:23 by vmakarya         ###   ########.fr       */
+/*   Updated: 2025/06/03 15:05:26 by vmakarya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	print_action(t_philo *philo, char *action)
 	if (!*(philo->finished))
 	{
 		pthread_mutex_lock(&philo->write_mutex);
-		printf("%ld %d %s\n", timestamp() - philo->data->start_time,
+		printf("[%ld] %d %s\n", timestamp() - philo->data->start_time,
 			philo->id, action);
 		pthread_mutex_unlock(&philo->write_mutex);
 	}
